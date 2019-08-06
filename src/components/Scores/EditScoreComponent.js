@@ -149,7 +149,6 @@ export default class EditScore extends Component {
     }
 
     render(){
-        let {courses} = this.state
         return(
             <div>
                 <h3>Update Score</h3>
