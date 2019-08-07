@@ -145,7 +145,7 @@ export default class EditScore extends Component {
         axios.post("http://localhost:5001/scores/edit/"+this.props.match.params.id,obj)
             .then(res=> console.log(res.data));
         
-        this.props.history.push("/");
+        this.props.history.push("/scores");
     }
 
     render(){

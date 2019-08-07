@@ -9,6 +9,7 @@ import "../../AddForm.css"
 export default class AddScoreForm extends Component {
     constructor(props){
         super(props);
+        //set the state to nothing
         this.state = {
             course: "",
             totalScore: 0,
@@ -24,20 +25,10 @@ export default class AddScoreForm extends Component {
             courses:[]
         }
 
-        this.onChangeCourse = this.onChangeCourse.bind(this);
-        this.onChangeTotalScore = this.onChangeTotalScore.bind(this);
-        this.onChangeTotalPutts = this.onChangeTotalPutts.bind(this);
-        this.onChangeScoreToPar = this.onChangeScoreToPar.bind(this);
-        this.onChangeHoleInOnes = this.onChangeHoleInOnes.bind(this);
-        this.onChangeEagles = this.onChangeEagles.bind(this);
-        this.onChangeBirdies = this.onChangeBirdies.bind(this);
-        this.onChangePars = this.onChangePars.bind(this);
-        this.onChangeBogeys = this.onChangeBogeys.bind(this);
-        this.onChangeDoubleBogeys = this.onChangeDoubleBogeys.bind(this);
-        this.onChangeTripleBogeys = this.onChangeTripleBogeys.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
-
+    //get the information from "/courses" to pass it down to courses component for course selector
     componentDidMount(){
         axios.get('http://localhost:5001/courses')
             .then(res => {
@@ -48,73 +39,13 @@ export default class AddScoreForm extends Component {
             .catch(function(error){
                 console.log(error)
             })
-    }    
-
-
-//---------METHODS TO UPDATE THE STATE ------------------  
-    onChangeCourse(e){
-        this.setState({
-            course: e.target.value
-        })
-    }
-    onChangeTotalScore(e){
-        this.setState({
-            totalScore: e.target.value
-        })
     }
 
-    onChangeTotalPutts(e){
-        this.setState({
-            totalPutts: e.target.value
-        })
-    }
 
-    onChangeScoreToPar(e){
-        this.setState({
-            scoreToPar: e.target.value
-        })
-    }
-
-    onChangeHoleInOnes(e){
-        this.setState({
-            holeInOnes: e.target.value
-        })
-    }
-
-    onChangeEagles(e){
-        this.setState({
-            eagles: e.target.value
-        })
-    }
-
-    onChangeBirdies(e){
-        this.setState({
-            birdies: e.target.value
-        })
-    }
-
-    onChangePars(e){
-        this.setState({
-            pars: e.target.value
-        })
-    }
-
-    onChangeBogeys(e){
-        this.setState({
-            bogeys: e.target.value
-        })
-    }
-
-    onChangeDoubleBogeys(e){
-        this.setState({
-            doubleBogeys: e.target.value
-        })
-    }
-
-    onChangeTripleBogeys(e){
-        this.setState({
-            tripleBogeys: e.target.value
-        })
+//---------METHOD TO UPDATE THE STATE ------------------  
+    handleChange(e){
+        //get the target "name" and set the state of the name to the value in the input box
+        this.setState({[e.target.name]: e.target.value})
     }
 
 
@@ -123,6 +54,7 @@ export default class AddScoreForm extends Component {
         //prevents default action
         e.preventDefault();
 
+        //add current date to score
         const date = new Date();
         let dd = date.getDate();
         var mm = date.getMonth() + 1;
@@ -162,6 +94,7 @@ export default class AddScoreForm extends Component {
             doubleBogeys: 0,
             tripleBogeys: 0
         })
+        this.props.history.push("/scores");
     }
 
     render() {
@@ -169,13 +102,14 @@ export default class AddScoreForm extends Component {
         return (
             <div className="addScoreForm bg-secondary">
                 <h1 align="center">Add Score</h1>
-                <Form className="addScoreForm" onSubmit={this.onSubmit}>
+                <Form className="addScoreForm" onSubmit={this.onSubmit} onChange={this.handleChange}>
                     <Form.Row className="justify-content-md-center">
                         <Form.Group as={Col}>
                             <Form.Label>Course</Form.Label>
-                            <Form.Control 
+                            <Form.Control
+                                name="course"
                                 as="select"
-                                onChange={this.onChangeCourse}>
+                            >
                                 <option defaultValue>Pick a Course</option>
                                 <Courses courses={courses} />
                             </Form.Control>
@@ -188,7 +122,7 @@ export default class AddScoreForm extends Component {
                                 className="formInput"
                                 type="number"
                                 value={this.state.totalScore}
-                                onChange={this.onChangeTotalScore}
+                                name="totalScore"
                             />
                         </Form.Group>
                         <Form.Group as={Col}>
@@ -197,7 +131,7 @@ export default class AddScoreForm extends Component {
                                 className="formInput"
                                 type="number"
                                 value={this.state.totalPutts}
-                                onChange={this.onChangeTotalPutts}
+                                name="totalPutts"
                             />
                         </Form.Group>
                         <Form.Group as={Col}>
@@ -206,7 +140,7 @@ export default class AddScoreForm extends Component {
                                 className="formInput"
                                 type="number"
                                 value={this.state.scoreToPar}
-                                onChange={this.onChangeScoreToPar}
+                                name="scoreToPar"
                             />
                         </Form.Group>
                     </Form.Row>
@@ -217,7 +151,7 @@ export default class AddScoreForm extends Component {
                                 className="formInput"
                                 type="number"
                                 value={this.state.eagles}
-                                onChange={this.onChangeEagles}
+                                name="eagles"
                             />
                         </Form.Group>
                         <Form.Group as={Col}>
@@ -226,7 +160,7 @@ export default class AddScoreForm extends Component {
                                 className="formInput"
                                 type="number"
                                 value={this.state.birdies}
-                                onChange={this.onChangeBirdies}
+                                name="birdies"
                             />
                         </Form.Group>
                         <Form.Group as={Col}>
@@ -235,7 +169,7 @@ export default class AddScoreForm extends Component {
                                 className="formInput"
                                 type="number"
                                 value={this.state.pars}
-                                onChange={this.onChangePars}
+                                name="pars"
                             />
                         </Form.Group>
                     </Form.Row>
@@ -246,7 +180,7 @@ export default class AddScoreForm extends Component {
                                 className="formInput"
                                 type="number"
                                 value={this.state.bogeys}
-                                onChange={this.onChangeBogeys}
+                                name="bogeys"
                             />
                         </Form.Group>
                         <Form.Group as={Col}>
@@ -255,7 +189,7 @@ export default class AddScoreForm extends Component {
                                 className="formInput"
                                 type="number"
                                 value={this.state.doubleBogeys}
-                                onChange={this.onChangeDoubleBogeys}
+                                name="doubleBogeys"
                             />
                         </Form.Group>
                         <Form.Group as={Col}>
@@ -264,7 +198,7 @@ export default class AddScoreForm extends Component {
                                 className="formInput"
                                 type="number"
                                 value={this.state.tripleBogeys}
-                                onChange={this.onChangeTripleBogeys}
+                                name="tripleBogeys"
                             />
                         </Form.Group>
                     </Form.Row>
@@ -277,19 +211,3 @@ export default class AddScoreForm extends Component {
     }
 
 }
-
-/*
-
-
-this.onChangeTotalScore = this.onChangeTotalScore.bind(this);
-        this.onChangeTotalPutts = this.onChangeTotalPutts.bind(this);
-        this.onChangeScoreToPar = this.onChangeScoreToPar.bind(this);
-        this.onChangeHoleInOnes = this.onChangeHoleInOnes.bind(this);
-        this.onChangeEagles = this.onChangeEagles.bind(this);
-        this.onChangeBirdies = this.onChangeBirdies.bind(this);
-        this.onChangePars = this.onChangePars.bind(this);
-        this.onChangeBogeys = this.onChangeBogeys.bind(this);
-        this.onChangeDoubleBogeys = this.onChangeDoubleBogeys.bind(this);
-        this.onChangeTripleBogeys = this.onChangeTripleBogeys.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-*/
